@@ -4,13 +4,13 @@ A minimalist PagSeguro Client.
 
 Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
 
-##Goals
+## Goals
 
 The goal of this project is to provide a complete set of workflows to work with PagSeguro in a minimalist way avoiding the pitfalls that the original lib shared in their documentation have.
 
 Currently it supports only the recurrent payment call in a simplistic way.
 
-##Support us by becoming a patron on Patreon
+## Support us by becoming a patron on Patreon
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/dmgarcia)
 
