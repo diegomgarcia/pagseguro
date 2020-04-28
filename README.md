@@ -1,3 +1,5 @@
+![.NET Core](https://github.com/diegomgarcia/pagseguro/workflows/.NET%20Core/badge.svg?branch=master)
+
 # PagSeguro Lib
 
 A minimalist PagSeguro Client.
