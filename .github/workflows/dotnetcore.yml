@@ -3,7 +3,6 @@ name: .NET Core
 on:
   push:
     branches: [ master ]
-    paths: 'lib/*'
   pull_request:
     branches: [ master ]
 
@@ -21,8 +20,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore lib/PagSeguro.csproj
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore lib/PagSeguro.csproj
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal lib/PagSeguro.csproj
