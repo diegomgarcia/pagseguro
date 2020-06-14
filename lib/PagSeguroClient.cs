@@ -28,7 +28,7 @@ namespace PagSeguro
         Bimonthly,
         Trimonthly,
         SemiAnnually,
-        Yealy
+        Yearly
     }
 
     public class PagSeguroPreApprovalPlanDetails
@@ -62,7 +62,7 @@ namespace PagSeguro
                     case PagSeguroApprovalChargePeriodType.Bimonthly: return "BIMONTHLY";
                     case PagSeguroApprovalChargePeriodType.Trimonthly: return "TRIMONTHLY";
                     case PagSeguroApprovalChargePeriodType.SemiAnnually: return "SEMIANNUALLY";
-                    case PagSeguroApprovalChargePeriodType.Yealy: return "YEARLY";
+                    case PagSeguroApprovalChargePeriodType.Yearly: return "YEARLY";
                     default: return "MONTHLY";
                 }
             }
@@ -100,6 +100,12 @@ namespace PagSeguro
         public string CheckoutUrl => (IsSandBox ? $"https://sandbox.pagseguro.uol.com.br/v2/pre-approvals/request.html?code={Code}" : $"https://pagseguro.uol.com.br/v2/pre-approvals/request.html?code={Code}");
     }
 
+
+    public class PagSeguroTransactionNotification
+    {
+        public string notificationCode { get; set; }
+        public string notificationType { get; set; }
+    }
 
 
     public class PagSeguroClient
@@ -174,7 +180,7 @@ namespace PagSeguro
             return request;
         }
 
-        public async Task<PagSeguroPreApprovalPlanResponse> SendPreApproval(PagSeguroPreApprovalPlanDetails preApproval)
+        public async Task<PagSeguroPreApprovalPlanResponse> CreatePreApprovalPlan(PagSeguroPreApprovalPlanDetails preApproval)
         {
             HttpClient client = GetHttpClient();
 
@@ -186,8 +192,14 @@ namespace PagSeguro
             content.Add(new KeyValuePair<string, string>("preApprovalName", preApproval.Name));
             content.Add(new KeyValuePair<string, string>("preApprovalCharge", preApproval.ChargeText));
             content.Add(new KeyValuePair<string, string>("preApprovalPeriod", preApproval.ChargePeriodText));
-            content.Add(new KeyValuePair<string, string>("preApprovalAmountPerPayment", preApproval.AmountPerPayment.ToString("G")));
-            content.Add(new KeyValuePair<string, string>("preApprovalTrialPeriodDuration", preApproval.TrialPeriodDuration.ToString()));
+            content.Add(new KeyValuePair<string, string>("preApprovalAmountPerPayment", preApproval.AmountPerPayment.ToString("0.00")));
+
+            if (preApproval.TrialPeriodDuration > 0)
+            {
+                content.Add(new KeyValuePair<string, string>("preApprovalTrialPeriodDuration",
+                    preApproval.TrialPeriodDuration.ToString()));
+            }
+
             content.Add(new KeyValuePair<string, string>("preApprovalExpirationValue", preApproval.ExpirationValue.ToString()));
             content.Add(new KeyValuePair<string, string>("preApprovalExpirationUnit", preApproval.ExpirationUnitText));
             content.Add(new KeyValuePair<string, string>("preApprovalDetails", preApproval.Details));

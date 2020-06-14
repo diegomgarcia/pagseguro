@@ -26,7 +26,7 @@ namespace PagSeguroTest
             details.ExpirationUnit = PagSeguroPreApprovalExpirationUnitType.Months;
             details.Details = "GOLD plan for monthly payment!";
             
-            PagSeguroPreApprovalPlanResponse result = await pagSeguro.SendPreApproval(details);
+            PagSeguroPreApprovalPlanResponse result = await pagSeguro.CreatePreApprovalPlan(details);
             
             Console.WriteLine($"Code: {result.Code}, Checkout URL: {result.CheckoutUrl}");
 
