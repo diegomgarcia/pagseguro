@@ -11,7 +11,7 @@ namespace PagSeguroTest
         {
             const bool isSandBox = true;
             const string accountEmail = "example@account.com";
-            const string sandBoxApiKey = "AA78507313FD4B6F8970D2581A9D9999";
+            const string sandBoxApiKey = "Your Api Key";
 
             PagSeguroClient pagSeguro = new PagSeguroClient(isSandBox, accountEmail, sandBoxApiKey);
             
