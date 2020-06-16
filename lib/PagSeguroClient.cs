@@ -452,9 +452,7 @@ namespace PagSeguro
                 doc.LoadXml(responseContent);
                 doc.LoadXml(doc.DocumentElement.OuterXml);
                 
-                
                 string jsonResponse = JsonConvert.SerializeXmlNode(doc).Replace("{\"transaction\":", "").Replace("}}}", "}}");
-
 
                 PagSeguroTransaction transaction =
                     JsonConvert.DeserializeObject<PagSeguroTransaction>(jsonResponse);
