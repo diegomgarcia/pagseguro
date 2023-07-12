@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -70,6 +71,8 @@ namespace PagSeguro
         }
 
         public Double AmountPerPayment { get; set; }
+        
+        public Double MembershipFee { get; set; }
         public int TrialPeriodDuration { get; set; }
         public int ExpirationValue { get; set; }
 
@@ -90,7 +93,19 @@ namespace PagSeguro
 
 
         public string Details { get; set; }
-
+        
+        public Double MaxAmountPerPeriod { get; set; }
+        public Double MaxAmountPerPayment { get; set; }
+        public Double MaxTotalAmount { get; set; }
+        public Double MaxPaymentsPerPeriod { get; set; }
+        public DateTime InitialDate { get; set; }
+        public DateTime FinalDate { get; set; }
+        public string DayOfYear { get; set; }
+        public string DayOfMonth { get; set; }
+        public string DayOfWeek { get; set; }
+        
+        public string CancelUrl { get; set; }
+        public int MaxUses { get; set; }
     }
 
     public class PagSeguroPreApprovalPlanResponse
@@ -293,6 +308,8 @@ namespace PagSeguro
 
     public class PagSeguroClient
     {
+        // always use dot separator for doubles
+        private CultureInfo _enUsCulture = CultureInfo.GetCultureInfo("en-US");
         private string Email { get; set; }
         private string Token { get; set; }
 
@@ -398,7 +415,7 @@ namespace PagSeguro
             content.Add(new KeyValuePair<string, string>("preApprovalName", preApproval.Name));
             content.Add(new KeyValuePair<string, string>("preApprovalCharge", preApproval.ChargeText));
             content.Add(new KeyValuePair<string, string>("preApprovalPeriod", preApproval.ChargePeriodText));
-            content.Add(new KeyValuePair<string, string>("preApprovalAmountPerPayment", preApproval.AmountPerPayment.ToString("0.00")));
+            content.Add(new KeyValuePair<string, string>("preApprovalAmountPerPayment", preApproval.AmountPerPayment.ToString("0.00", _enUsCulture)));
 
             if (preApproval.TrialPeriodDuration > 0)
             {
@@ -406,8 +423,14 @@ namespace PagSeguro
                     preApproval.TrialPeriodDuration.ToString()));
             }
 
-            content.Add(new KeyValuePair<string, string>("preApprovalExpirationValue", preApproval.ExpirationValue.ToString()));
-            content.Add(new KeyValuePair<string, string>("preApprovalExpirationUnit", preApproval.ExpirationUnitText));
+            if (preApproval.ExpirationValue > 0)
+            {
+                content.Add(new KeyValuePair<string, string>("preApprovalExpirationValue",
+                    preApproval.ExpirationValue.ToString()));
+                content.Add(new KeyValuePair<string, string>("preApprovalExpirationUnit",
+                    preApproval.ExpirationUnitText));
+            }
+
             content.Add(new KeyValuePair<string, string>("preApprovalDetails", preApproval.Details));
             content.Add(new KeyValuePair<string, string>("receiverEmail", Email));
 
@@ -506,7 +529,7 @@ namespace PagSeguro
             {
                 content.Add(new KeyValuePair<string, string>($"itemId{i+1}", preApprovalPaymentRequest.Items[i].Id));
                 content.Add(new KeyValuePair<string, string>($"itemDescription{i+1}", preApprovalPaymentRequest.Items[i].Description));
-                content.Add(new KeyValuePair<string, string>($"itemAmount{i+1}", preApprovalPaymentRequest.Items[i].Ammount.ToString("0.00")));
+                content.Add(new KeyValuePair<string, string>($"itemAmount{i+1}", preApprovalPaymentRequest.Items[i].Ammount.ToString("0.00", _enUsCulture)));
                 content.Add(new KeyValuePair<string, string>($"itemQuantity{i+1}", preApprovalPaymentRequest.Items[i].Quantity.ToString()));
             }
             
